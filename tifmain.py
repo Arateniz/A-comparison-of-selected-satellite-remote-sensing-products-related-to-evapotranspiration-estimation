@@ -7,7 +7,7 @@ from tiflibr import *
 from tiffunc import *
 
 def main():
-	datapath = "data/POL2/"
+	datapath = "data/POL/"
 	areapath = "data/geojson/"
 
 	area = gpd.read_file(areapath + "opn.geojson"), "OPN"
@@ -22,15 +22,22 @@ def main():
 			rs.open(datapath + "ECO3ETPTJPL.001_EVAPOTRANSPIRATION_PT_JPL_ETdaily_doy2020227094517_aid0001.tif"),
 			rs.open(datapath + "ECO3ETPTJPL.001_EVAPOTRANSPIRATION_PT_JPL_ETdaily_doy2020235063827_aid0001.tif"))
 
+	#i = 1
 	#for data in ECOd:
-	#	draw(data, area, "ECOSTRESS 70 m:")
+	#	draw(data, area, i, "ECOSTRESS 70 m:", "eco-date", False)
+	#	i+=1
 
-	#aquaterra_comp(MYD, MOD, area)
+	#aquaterra_comp(MYD, MOD, area, False, "aquter", False)
 
-	#ecomod_comp(ECO, MOD, area, False)
-	ecomod_comp(ECO, MYD, area, False)
+	#ecomod_comp(ECO, MOD, area, False, "ecomod", False)
+	#diff_comp(ECO, MOD, area, "ECOSTRESS / MODIS", "ecomod_4", False, True)
 
-	#ecomod_comp(ECO, MOD, area, True)
+	#ecomod_comp(ECO, MYD, area, False, "ecomyd", False)
+	#diff_comp(ECO, MYD, area, "ECOSTRESS / MODIS", "ecomyd_4", False, True)
+
+	CMB = get_comb(MOD, MYD)
+	ecomod_comp(ECO, CMB, area, False, "ecocmb", False, MOD.name)
+	diff_comp(ECO, CMB, area, "ECOSTRESS / MODIS", "ecocmb_4", False, True)
 
 if __name__ == "__main__":
 	main()
