@@ -111,22 +111,21 @@ def get_newres(data70, data500):
 	file.write(data70_res)
 	return file
 
-# TODO: NIE DZIAŁA, trzeba naprawić
-#def get_avgmod(aqua, terra):
-#	aqu_data = aqua.read(1)
-#	ter_data = terra.read(1)
-#
-#	avg_data = (aqu_data + ter_data) / 2
-#	meta = aqua.meta.copy()
-#	meta.update({
-#		"driver": "GTiff",
-#		"height": avg_data.shape[0],
-#		"width": avg_data.shape[1],
-#	})
-#
-#	file = MemoryFile().open(**meta)
-#	file.write(avg_data)
-#	return file
+def get_comb(aqua, terra):
+	aqu_data = aqua.read(1)
+	ter_data = terra.read(1)
+
+	avg_data = (aqu_data + ter_data) / 2
+	meta = aqua.meta.copy()
+	meta.update({
+		"driver": "GTiff",
+		"height": avg_data.shape[0],
+		"width": avg_data.shape[1],
+	})
+
+	file = MemoryFile().open(**meta)
+	file.write(avg_data, 1)
+	return file
 
 def get_vmin(*args):
 	vmin = np.nanmin(args[0])
@@ -145,3 +144,12 @@ def get_vmax(*args):
 				vmax = np.nanmax(arr)
 
 	return vmax
+
+def get_rmse(meas_1, meas_2):
+	return np.sqrt(np.nanmean((meas_2 - meas_1)**2))
+
+def get_mae(meas_1, meas_2):
+	return np.nanmean(np.abs(meas_2 - meas_1))
+
+def get_mbe(meas_1, meas_2):
+	return np.nanmean(meas_2 - meas_1)
